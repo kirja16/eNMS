@@ -77,8 +77,8 @@ class BaseController:
         if settings["paths"]["custom_code"]:
             sys_path.append(settings["paths"]["custom_code"])
         self.fetch_version()
-        self.init_logs()
         return
+        self.init_logs()
         self.init_redis()
         self.init_scheduler()
         self.init_connection_pools()
