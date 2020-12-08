@@ -200,34 +200,7 @@ class Server(Flask):
 
         @blueprint.route("/login", methods=["GET", "POST"])
         def login():
-            if request.method == "POST":
-                kwargs, success = request.form.to_dict(), False
-                username = kwargs["name"]
-                try:
-                    user = app.authenticate_user(**kwargs)
-                    if user:
-                        login_user(user, remember=False)
-                        session.permanent = True
-                        success, log = True, f"User '{username}' logged in"
-                    else:
-                        log = f"Authentication failed for user '{username}'"
-                except Exception as exc:
-                    log = f"Authentication error for user '{username}' ({exc})"
-                finally:
-                    app.log("info" if success else "warning", log, logger="security")
-                    if success:
-                        return redirect(url_for("blueprint.route", page="dashboard"))
-                    else:
-                        abort(403)
-            if not current_user.is_authenticated:
-                login_form = LoginForm(request.form)
-                methods = app.settings["authentication"]["methods"].items()
-                login_form.authentication_method.choices = [
-                    (method, properties["display_name"])
-                    for method, properties in methods
-                    if properties["enabled"]
-                ]
-                return render_template("login.html", login_form=login_form)
+            login_user(db.fetch("user", name="demo"))
             return redirect(url_for("blueprint.route", page="dashboard"))
 
         @blueprint.route("/dashboard")
