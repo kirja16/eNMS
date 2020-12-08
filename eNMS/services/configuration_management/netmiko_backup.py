@@ -47,7 +47,7 @@ class NetmikoBackupService(ConnectionService):
     __mapper_args__ = {"polymorphic_identity": "netmiko_backup_service"}
 
     def job(self, run, payload, device):
-        path = Path.cwd() / "network_data" / device.name
+        path = Path.cwd() / "eNMS" / "network_data" / device.name
         path.mkdir(parents=True, exist_ok=True)
         try:
             runtime = datetime.now()

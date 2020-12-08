@@ -35,7 +35,7 @@ class NapalmBackupService(ConnectionService):
     __mapper_args__ = {"polymorphic_identity": "napalm_backup_service"}
 
     def job(self, run, payload, device):
-        path = Path.cwd() / "network_data" / device.name
+        path = Path.cwd() / "eNMS" / "network_data" / device.name
         path.mkdir(parents=True, exist_ok=True)
         try:
             device.last_runtime = datetime.now()

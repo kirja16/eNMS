@@ -24,7 +24,7 @@ class GitService(Service):
 
     def job(self, run, payload, device=None):
         repo = Repo(
-            Path.cwd() / self.git_repository
+            Path.cwd() / "eNMS" / self.git_repository
             if self.relative_path
             else self.git_repository
         )

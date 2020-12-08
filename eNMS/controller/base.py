@@ -67,7 +67,7 @@ class BaseController:
         self.cli_command = self.detect_cli()
         self.load_custom_properties()
         self.load_configuration_properties()
-        self.path = Path.cwd()
+        self.path = Path.cwd() / "eNMS"
         self.init_encryption()
         self.use_vault = settings["vault"]["use_vault"]
         if self.use_vault:
