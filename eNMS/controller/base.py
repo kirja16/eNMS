@@ -115,6 +115,7 @@ class BaseController:
         db.base.metadata.create_all(bind=db.engine)
         configure_mappers()
         db.configure_model_events(self)
+        self.get_git_content()
         if self.cli_command:
             return
         self.init_forms()
@@ -125,7 +126,6 @@ class BaseController:
                 import_export_types=db.import_export_models,
             )
             self.update_credentials()
-            self.get_git_content()
         self.configure_server_id()
         # self.reset_run_status()
         db.session.commit()
