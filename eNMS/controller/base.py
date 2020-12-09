@@ -125,7 +125,7 @@ class BaseController:
                 import_export_types=db.import_export_models,
             )
             self.update_credentials()
-            # self.get_git_content()
+            self.get_git_content()
         self.configure_server_id()
         # self.reset_run_status()
         db.session.commit()
