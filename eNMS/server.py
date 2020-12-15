@@ -59,13 +59,6 @@ class Server(Flask):
                 client_address = request.environ.get(
                     "HTTP_X_FORWARDED_FOR", request.environ["REMOTE_ADDR"]
                 )
-                app.log(
-                    "warning",
-                    (
-                        f"Unauthorized {request.method} request from "
-                        f"'{client_address}' calling the endpoint '{request.url}'"
-                    ),
-                )
                 return redirect(url_for("blueprint.route", page="login"))
             else:
                 if (
