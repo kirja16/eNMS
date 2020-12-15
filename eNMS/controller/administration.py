@@ -284,7 +284,7 @@ class AdministrationController(BaseController):
         user.small_menu = not user.small_menu
 
     def switch_theme(self, user_id, theme):
-        pass
+        return {"error": "Cannot switch theme in demo (read-only mode)"}
 
     def upload_files(self, **kwargs):
         file = kwargs["file"]
