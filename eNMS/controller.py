@@ -965,7 +965,7 @@ class Controller:
                     raise Exception("Invalid archive provided in service import.")
                 continue
             with open(path, "r") as migration_file:
-                instances = yaml.load(migration_file, Loader=yaml.CLoader)
+                instances = yaml.load(migration_file, Loader=yaml.Loader)
             before_time = datetime.now()
             env.log("info", f"Creating {model}s")
             for instance in instances:
