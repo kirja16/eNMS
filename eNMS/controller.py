@@ -1087,42 +1087,33 @@ class Controller:
         }
 
     def import_services(self, **kwargs):
-    file = kwargs["file"]
-    base_path = vs.file_path / "services"
-    base_path.mkdir(parents=True, exist_ok=True)
-
-    filepath = base_path / file.filename
-    file.save(str(filepath))
-
-    def is_safe_path(base_path, target_path):
-        return base_path in target_path.parents or base_path == target_path
-
-    with open_tar(filepath) as tar_file:
-        for member in tar_file.getmembers():
-            member_path = Path(base_path) / member.name
-            member_path = member_path.resolve()
-
-            if not is_safe_path(base_path.resolve(), member_path):
-                raise ValueError(f"Unsafe path detected: {member.name}")
-
-        tar_file.extractall(path=base_path)
-
-        folder_name = tar_file.getmembers()[0].name
-        status = self.migration_import(
-            folder="services",
-            name=folder_name,
-            import_export_types=["service", "workflow_edge"],
-            service_import=True,
-            skip_pool_update=True,
-            skip_model_update=True,
-        )
-
-    rmtree(base_path / folder_name, ignore_errors=True)
-
-    if "Error during import" in status:
-        raise Exception(status)
-
-    return status
+        file = kwargs["file"]
+        service_path = vs.file_path / "services"
+        filepath = service_path / file.filename
+        service_path.mkdir(parents=True, exist_ok=True)
+        file.save(str(filepath))
+        with open_tar(filepath) as tar_file:
+            for member in tar_file.getmembers():
+                member_path = (Path(service_path) / member.name).resolve()
+                if service_path not in member_path.parents:
+                    raise ValueError(
+                        "Unsafe path detected when importing service archive "
+                        f"(User: {current_user} - Path: {member_path})"
+                    )
+            tar_file.extractall(path=vs.file_path / "services")
+            folder_name = tar_file.getmembers()[0].name
+            status = self.migration_import(
+                folder="services",
+                name=folder_name,
+                import_export_types=["service", "workflow_edge"],
+                service_import=True,
+                skip_pool_update=True,
+                skip_model_update=True,
+            )
+        rmtree(vs.file_path / "services" / folder_name, ignore_errors=True)
+        if "Error during import" in status:
+            raise Exception(status)
+        return status
 
     def import_topology(self, **kwargs):
         file = kwargs["file"]
